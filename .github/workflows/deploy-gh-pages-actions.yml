@@ -8,10 +8,10 @@ deploy-gh-pages:
   runs-on: ubuntu-latest
   steps: 
     - uses: actions/checkout@v3
-    with:
-      token: ${{ github.token }} 
+      with:
+        token: ${{ github.token }} 
     - uses: actions/setup-node@v3
-    with:
+      with:
       node-version: "16" 
     - run: |
 git config --global user.email "${{ github.event.pusher.email }}"
