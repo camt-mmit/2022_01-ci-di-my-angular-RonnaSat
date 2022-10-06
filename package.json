@@ -2,6 +2,7 @@
   "name": "my-angular",
   "version": "0.0.0",
   "scripts": {
+    "deploy": "ng build --configuration production --base-href=/2022_01-ci-di-my-angular-RonnaSat/ && cp ./dist/my-angular/index.html ./dist/my-angular/404.html && gh-pages -d ./dist/my-angular",
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
@@ -28,6 +29,7 @@
     "@angular/compiler-cli": "^14.2.0",
     "@types/jasmine": "~4.0.0",
     "angular-cli-ghpages": "1.0.3",
+    "gh-pages": "^4.0.0",
     "jasmine-core": "~4.3.0",
     "karma": "~6.4.0",
     "karma-chrome-launcher": "~3.1.0",
