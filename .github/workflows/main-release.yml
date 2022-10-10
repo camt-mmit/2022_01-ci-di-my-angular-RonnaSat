@@ -18,7 +18,7 @@ jobs:
           node-version: "16"
       - name: Set env
         run: |
-          VERSION="${REF_NAME#refs/heads/v}"
+          VERSION="${TAG_NAME#refs/heads/v}"
           echo "VERSION=${VERSION}" >> $GITHUB_ENV
           echo "BRANCH_NAME=b${VERSION}" >> $GITHUB_ENV
           echo "TAG_NAME=v${VERSION}" >> $GITHUB_ENV
