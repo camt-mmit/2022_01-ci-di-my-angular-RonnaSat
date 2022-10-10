@@ -1,8 +1,8 @@
 name: main release
-run-name: ${{ github.actor }} is releasing feature
-on: 
+run-name: ${{ github.actor }} is releasing main
+on:
   push:
-    tags: 
+    tags:
       - v*.*.*
 jobs:
   ci-main:
@@ -16,16 +16,16 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: "16"
-          cache : 'yarn'
-      - name: Set env
+      - name: Setup git user
+        run: |
+          git config --global user.email "${{ github.event.pusher.email }}"
+          git config --global user.name "${{ github.actor }}"
+      - name: Setup environment variables
         run: |
           VERSION="${REF_NAME#refs/heads/v}"
           echo "VERSION=${VERSION}" >> $GITHUB_ENV
           echo "BRANCH_NAME=b${VERSION}" >> $GITHUB_ENV
           echo "TAG_NAME=v${VERSION}" >> $GITHUB_ENV
-      - run: |
-          git config --global user.email "${{ github.event.pusher.email }}"
-          git config --global user.name "${{ github.actor }}"
       - name: Release main
         uses: actions/create-release@v1
         env:
