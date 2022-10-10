@@ -8,7 +8,7 @@ jobs:
   ci-main:
     runs-on: ubuntu-latest
     env:
-      TAG_NAME: ${{ github.ref }}
+      REF_NAME: ${{ github.ref }}
     steps:
       - uses: actions/checkout@v3
         with:
@@ -19,7 +19,7 @@ jobs:
           cache : 'yarn'
       - name: Set env
         run: |
-          VERSION="${TAG_NAME#refs/heads/v}"
+          VERSION="${REF_NAME#refs/heads/v}"
           echo "VERSION=${VERSION}" >> $GITHUB_ENV
           echo "BRANCH_NAME=b${VERSION}" >> $GITHUB_ENV
           echo "TAG_NAME=v${VERSION}" >> $GITHUB_ENV
@@ -35,4 +35,3 @@ jobs:
           release_name: Release ${{ env.VERSION }}
           draft: false
           prerelease: false
-          
