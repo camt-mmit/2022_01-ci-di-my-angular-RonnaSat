@@ -15,7 +15,8 @@ jobs:
           token: ${{ secrets.PUSH_MAIN }} 
       - uses: actions/setup-node@v3
         with:
-          node-version: "16" 
+          node-version: "16"
+          cache : 'yarn'
       - name: Set env
         run: |
           VERSION="${REF_NAME#refs/heads/b}"
