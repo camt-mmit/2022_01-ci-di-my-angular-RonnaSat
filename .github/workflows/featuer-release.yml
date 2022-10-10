@@ -1,23 +1,22 @@
-name: feature-release
+name: feature release
 run-name: ${{ github.actor }} is releasing feature
 on:
-  push: 
-    branchs: 
+  push:
+    branches:
       - b*.*.*
-jobs: 
+jobs:
   ci-feature:
     runs-on: ubuntu-latest
-    env: 
+    env:
       REF_NAME: ${{ github.ref }}
-    steps: 
+    steps:
       - uses: actions/checkout@v3
         with:
-          token: ${{ secrets.PUSH_MAIN }} 
+          token: ${{ secrets.PUSH_MAIN }}
       - uses: actions/setup-node@v3
         with:
           node-version: "16"
-          cache : 'yarn'
-      - name: Set env
+      - name: Setup environment variables
         run: |
           VERSION="${REF_NAME#refs/heads/b}"
           echo "VERSION=${VERSION}" >> $GITHUB_ENV
@@ -27,16 +26,19 @@ jobs:
         run: |
           git config --global user.email "${{ github.event.pusher.email }}"
           git config --global user.name "${{ github.actor }}"
-      - run: npm i -g yarn
-      - run: yarn install --frozen-lockfile
-      - run: npx ng build --configuration=production --base-href="/${{ github.event.repository.name }}/"
-      - run: yarn run lint
-      - run: yarn run test:ci
-      - run: |
+      - name: Install yarn
+        run: npm install -g yarn
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+      - name: Lint project
+        run: yarn run lint
+      - name: Test project
+        run: yarn run test:ci
+      - name: Merge to master
+        run: |
           git fetch --unshallow
           git checkout master
           git merge ${{ env.BRANCH_NAME }}
           git push origin master
-          git tag -a ${{ env.TAG_NAME }} -m "my-version ${{ env.VERSION }}"
+          git tag -a ${{ env.TAG_NAME }} -m "my version ${{ env.VERSION }}"
           git push origin master --tags
-          
