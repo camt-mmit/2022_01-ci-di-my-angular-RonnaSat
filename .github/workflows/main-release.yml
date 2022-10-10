@@ -12,19 +12,25 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         with:
-          token: ${{ secrets.RELEASE_MAIN }}
+          token: ${{ secrets.RELEASE_TOKEN }}
       - uses: actions/setup-node@v3
         with:
           node-version: "16"
+      - name: Set env
+        run: |
+          VERSION="${REF_NAME#refs/heads/v}"
+          echo "VERSION=${VERSION}" >> $GITHUB_ENV
+          echo "BRANCH_NAME=b${VERSION}" >> $GITHUB_ENV
+          echo "TAG_NAME=v${VERSION}" >> $GITHUB_ENV
       - run: |
           git config --global user.email "${{ github.event.pusher.email }}"
           git config --global user.name "${{ github.actor }}"
       - name: Release main
         uses: actions/create-release@v1
         env:
-          GITHUB_TOKEN: ${{ secrets.RELEASE_MAIN }}
+          GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
         with:
-          tag_name: ${{ github.ref }}
-          release_name: Release ${{ github.ref }}
+          tag_name: ${{ env.TAG_NAME }}
+          release_name: Release ${{ env.VERSION }}
           draft: false
           prerelease: false
